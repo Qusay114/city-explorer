@@ -20,3 +20,7 @@ This app to explorer cities and locations map by inputing the location name
 
 ## Credit and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+<br><br><br><br><br><br>
+# WorkFlow
+
+![image](./src/assets/lab06_workflow.png)

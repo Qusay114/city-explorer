@@ -22,7 +22,6 @@ class Main extends React.Component
     getLocation = async (event) => {
         event.preventDefault();
         const url = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.query}&format=json`;
-        const myApi = await axios.get(``)
         let request = {};
         try{request = await axios.get(url) } 
         catch {
