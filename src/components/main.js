@@ -40,8 +40,8 @@ class Main extends React.Component
             
         })
         const urlReq = `${process.env.REACT_APP_SERVER}/weather`;
-        console.log(process.env.REACT_APP_LOCATION_IQ_KEY);
-        console.log(process.env.REACT_APP_SERVER);
+        // console.log(process.env.REACT_APP_LOCATION_IQ_KEY);
+        // console.log(process.env.REACT_APP_SERVER);
         const localReq = await axios.get(urlReq);
         console.log(localReq.data);
         this.setState({weatherData:localReq.data})
