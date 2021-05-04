@@ -16,7 +16,7 @@ class Main extends React.Component
             found:false,
             show:false,
             errorMesg:'',
-            weather:'',
+            weatherData:[],
             
         }
     }
@@ -39,10 +39,12 @@ class Main extends React.Component
             location:request.data[0] ,
             
         })
-        
-        const localReq = await axios.get(`https://first-local-server01.herokuapp.com/weather/${this.state.query}/${this.state.location.lat}/${this.state.location.lon}`);
+        const urlReq = `${process.env.REACT_APP_SERVER}/weather`;
+        console.log(process.env.REACT_APP_LOCATION_IQ_KEY);
+        console.log(process.env.REACT_APP_SERVER);
+        const localReq = await axios.get(urlReq);
         console.log(localReq.data);
-        this.setState({weather:localReq.data})
+        this.setState({weatherData:localReq.data})
         
         
       };
@@ -55,13 +57,25 @@ class Main extends React.Component
     handleCloseMessage = () => this.setState({show:false})
     render(){
         return(
-            <div style={{height:'80rem'}}>
+            <div style={{minHeight:'80rem'}}>
       <LocationSearch getLocation={this.getLocation} updateQuery={this.updateQuery} />
       {this.state.found && 
       <LocationData location={this.state.location.display_name} imageUrl={`https://maps.locationiq.com/v3/staticmap?key=pk.d36871f015649f915282f374cff76628&q&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`} alt='city' />
-      }
+    }
       <ErrorMessage handleCloseMessage={this.handleCloseMessage} show={this.state.show}  errorMesg={this.state.errorMesg}/>
-      <div>{this.state.weather}</div>
+      
+     
+            <div>
+            {this.state.weatherData.map( data => {
+                return(<>
+                    <div>Data: {data.date}</div> 
+                    <div>Description: {data.description}</div> 
+                    <br></br><br></br>
+                    </>
+                )
+                    }) 
+            }
+            </div>
       </div>
         )
     }
