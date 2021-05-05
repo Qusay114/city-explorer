@@ -3,6 +3,9 @@ import axios from 'axios';
 import LocationSearch from './LocationSearch';
 import LocationData from './LocationData';
 import ErrorMessage from './ErrorMessage';
+import Weather from './Weather';
+import Movies from './Movies';
+import Loading from './Loading';
 
 
 class Main extends React.Component 
@@ -17,12 +20,18 @@ class Main extends React.Component
             show:false,
             errorMesg:'',
             weatherData:[],
+            moviesData:[],
+            waitReqs:false , 
             
         }
     }
 
     getLocation = async (event) => {
         event.preventDefault();
+        this.setState({
+            weatherData:[],
+            moviesData:[],
+        })
         event.target.searchBox.value = '';
         const url = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.query}&format=json`;
         let request = {};
@@ -39,14 +48,22 @@ class Main extends React.Component
             location:request.data[0] ,
             
         })
-        const urlReq = `${process.env.REACT_APP_SERVER}/weather`;
-        // console.log(process.env.REACT_APP_LOCATION_IQ_KEY);
-        // console.log(process.env.REACT_APP_SERVER);
+        const urlReq = `${process.env.REACT_APP_SERVER}/weather?lat=${this.state.location.lat}&lon=${this.state.location.lon}`;
+        const urlMovies = `${process.env.REACT_APP_SERVER}/movies?city=${this.state.query}`;
+        this.setState({waitReqs:true});
         const localReq = await axios.get(urlReq);
-        console.log(localReq.data);
-        this.setState({weatherData:localReq.data})
-        
-        
+        const moviesReq = await axios.get(urlMovies);
+        // console.log(moviesReq.data);
+        // console.log(localReq.data);
+        this.setState({
+            weatherData:localReq.data , 
+            moviesData:moviesReq.data ,
+            waitReqs:false,
+        });
+
+        // const test = await axios.get('http://localhost:3001/test');
+        // console.log(test.data);
+         
       };
 
     updateQuery = (event) => {
@@ -57,25 +74,18 @@ class Main extends React.Component
     handleCloseMessage = () => this.setState({show:false})
     render(){
         return(
-            <div style={{minHeight:'80rem'}}>
-      <LocationSearch getLocation={this.getLocation} updateQuery={this.updateQuery} />
-      {this.state.found && 
-      <LocationData location={this.state.location.display_name} imageUrl={`https://maps.locationiq.com/v3/staticmap?key=pk.d36871f015649f915282f374cff76628&q&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`} alt='city' />
-    }
-      <ErrorMessage handleCloseMessage={this.handleCloseMessage} show={this.state.show}  errorMesg={this.state.errorMesg}/>
-      
-     
-            <div>
-            {this.state.weatherData.map( data => {
-                return(<>
-                    <div>Data: {data.date}</div> 
-                    <div>Description: {data.description}</div> 
-                    <br></br><br></br>
-                    </>
-                )
-                    }) 
+        <div style={{minHeight:'80rem'}}>
+            <LocationSearch getLocation={this.getLocation} updateQuery={this.updateQuery} />
+            {this.state.found && 
+                <LocationData 
+                location={this.state.location.display_name} 
+                imageUrl={`https://maps.locationiq.com/v3/staticmap?key=pk.d36871f015649f915282f374cff76628&q&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`} 
+                alt='city' />
             }
-            </div>
+            <ErrorMessage handleCloseMessage={this.handleCloseMessage} show={this.state.show}  errorMesg={this.state.errorMesg}/>
+            <Loading wait={this.state.waitReqs} />
+            <Weather weatherData={this.state.weatherData} />
+            <Movies moviesData={this.state.moviesData}/>
       </div>
         )
     }
