@@ -19,8 +19,21 @@ This app to explorer cities and locations map by inputing the location name
 01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
 
 ## Credit and Collaborations
-My Partner was Abdulla Abu khurma
 
-# WorkFlow
+
+# WorkFlow:
+<br><br><br><br>
+
+# WRRC for lab07 :
+
+![image](./src/assets/WRRC_Lab07.png)
+<br><br><br><br>
+
+# WRRC for lab08 :
 
 ![image](./src/assets/WRRC_Lab08.png)
+<br><br><br><br>
+
+# WRRC for lab09 :
+
+![image](./src/assets/WRRC_Lab09.png)
