@@ -14,7 +14,7 @@ class Main extends React.Component
     {
         super(props)
         this.state={
-            location:{lat:'' , lon:''},
+            location:{},
             query:'',
             found:false,
             show:false,
@@ -53,17 +53,13 @@ class Main extends React.Component
         this.setState({waitReqs:true});
         const localReq = await axios.get(urlReq);
         const moviesReq = await axios.get(urlMovies);
-        // console.log(moviesReq.data);
-        // console.log(localReq.data);
+        
         this.setState({
             weatherData:localReq.data , 
             moviesData:moviesReq.data ,
             waitReqs:false,
         });
-
-        // const test = await axios.get('http://localhost:3001/test');
-        // console.log(test.data);
-         
+      
       };
 
     updateQuery = (event) => {
@@ -71,18 +67,28 @@ class Main extends React.Component
             this.setState({query:(event.target.value).toLowerCase()})   
           };
 
-    handleCloseMessage = () => this.setState({show:false})
+    handleCloseMessage = () => this.setState({show:false});
+
     render(){
         return(
         <div style={{minHeight:'80rem'}}>
-            <LocationSearch getLocation={this.getLocation} updateQuery={this.updateQuery} />
+
+            <LocationSearch getLocation={this.getLocation} 
+            updateQuery={this.updateQuery} 
+            />
+
             {this.state.found && 
                 <LocationData 
                 location={this.state.location.display_name} 
                 imageUrl={`https://maps.locationiq.com/v3/staticmap?key=pk.d36871f015649f915282f374cff76628&q&center=${this.state.location.lat},${this.state.location.lon}&zoom=10`} 
                 alt='city' />
             }
-            <ErrorMessage handleCloseMessage={this.handleCloseMessage} show={this.state.show}  errorMesg={this.state.errorMesg}/>
+
+            <ErrorMessage handleCloseMessage={this.handleCloseMessage} 
+            show={this.state.show} 
+             errorMesg={this.state.errorMesg}
+             />
+
             <Loading wait={this.state.waitReqs} />
             <Weather weatherData={this.state.weatherData} />
             <Movies moviesData={this.state.moviesData}/>
