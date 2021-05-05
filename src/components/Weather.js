@@ -9,11 +9,11 @@ class Weather extends React.Component{
             <Row>
                 
             {this.props.weatherData.map( data => {
-                return(<Card style={{margin:'3rem' , minHeight:'8rem' , minWidth:'15rem'}}>
+                return(<Card style={{margin:'3rem' , minHeight:'8rem' , minWidth:'30rem'}}>
                         <Card.Body>
+                            <Card.Text>Description: {data.description}</Card.Text> 
                             <Card.Text>Date: {data.date}</Card.Text> 
                             
-                            <Card.Text>Description: {data.description}</Card.Text> 
                         </Card.Body>
                     </Card>
                 )
