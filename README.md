@@ -37,3 +37,8 @@ This app to explorer cities and locations map by inputing the location name
 # WRRC for lab09 :
 
 ![image](./src/assets/WRRC_Lab09.png)
+<br><br><br><br>
+
+# WRRC for lab10 :
+
+![image](./src/assets/WRRC_Lab10.png)
