@@ -33,9 +33,15 @@ class Main extends React.Component
             moviesData:[],
         })
         event.target.searchBox.value = '';
-        const url = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.query}&format=json`;
+        const url = `https://us1.locationiq.com/v1/search.php`;
         let request = {};
-        try{request = await axios.get(url) } 
+        const locationQueryParams = {
+            params:{
+            key:process.env.REACT_APP_LOCATION_IQ_KEY,
+            q:this.state.query,
+            format:'json'}
+        }
+        try{request = await axios.get(url , locationQueryParams) } 
         catch(error){
             this.setState({show:true , found:false , errorMesg:error.message});
             return ;
@@ -48,14 +54,28 @@ class Main extends React.Component
             location:request.data[0] ,
             
         })
-        const urlReq = `${process.env.REACT_APP_SERVER}/weather?lat=${this.state.location.lat}&lon=${this.state.location.lon}`;
-        const urlMovies = `${process.env.REACT_APP_SERVER}/movies?city=${this.state.query}`;
+        
+        const urlReq = `${process.env.REACT_APP_SERVER}/weather`;
+        const weatherQueryParams = {
+            params:{
+                lat:this.state.location.lat,
+                lon:this.state.location.lon,
+            }
+        }
+
+        const urlMovies = `${process.env.REACT_APP_SERVER}/movies`;
+        const moviesQueryParams ={
+            params:{
+                city:this.state.query
+            }
+        }
+
         this.setState({waitReqs:true});
-        const localReq = await axios.get(urlReq);
-        const moviesReq = await axios.get(urlMovies);
+        const weatherReq = await axios.get(urlReq , weatherQueryParams);
+        const moviesReq = await axios.get(urlMovies , moviesQueryParams);
         
         this.setState({
-            weatherData:localReq.data , 
+            weatherData:weatherReq.data , 
             moviesData:moviesReq.data ,
             waitReqs:false,
         });
